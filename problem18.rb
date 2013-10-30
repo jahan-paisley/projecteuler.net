@@ -1,37 +1,80 @@
-require 'pry'
-
 class Problem18
-
-  def initialize
-    @words = {1 =>"one",
-      2 =>"two", 3 =>"three", 4 =>"four", 5 =>"five", 6 =>"six", 7 =>"seven", 8 =>"eight", 9 =>"nine",
-      10 =>"ten", 11 =>"eleven", 12 =>"twelve", 13 =>"thirteen", 14 =>"fourteen", 15 =>"fifteen", 16 =>"sixteen", 17 =>"seventeen", 18 =>"eighteen", 19 =>"nineteen",
-      20 =>"twenty", 30 =>"thirty", 40 =>"forty", 50 =>"fifty", 60 =>"sixty", 70 =>"seventy", 80 =>"eighty", 90 =>"ninety", 100 =>"hundred",  
-      1000 =>"thousand",
-      0 => ""
-    }
+  
+  def initialize 
+    @array=
+                                   [[75],
+                                  [95, 64],
+                                [17, 47, 82],
+                              [18, 35, 87, 10],
+                            [20,  4, 82, 47, 65],
+                          [19,  1, 23, 75,  3, 34],
+                        [88,  2, 77, 73,  7, 63, 67],
+                      [99, 65,  4, 28,  6, 16, 70, 92],
+                    [41, 41, 26, 56, 83, 40, 80, 70, 33],
+                  [41, 48, 72, 33, 47, 32, 37, 16, 94, 29],
+                [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14],
+              [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57],
+            [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48],
+          [63, 66,  4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
+        [ 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23]]
+    # [
+    #   [1],
+    #   [2,2],
+    #   [3,2,3],
+    #   [4,2,3,4],
+    #   [5,2,3,4,5],
+    #   [6,2,3,4,5,6],
+    #   [7,2,3,4,5,6,7],
+    #   [8,2,3,4,5,6,7,8],      
+    #   [9,2,3,4,5,6,7,8,9],      
+    #   [10,2,3,4,5,6,7,8,9,10],      
+    #   [11,2,3,4,5,6,7,8,9,10,11],
+    #   [12,2,3,4,5,6,7,8,9,10,11,12],
+    #   [14,2,3,4,5,,7,8,9,10,11,23,13]            
+    #  ]
+    
+    # [
+    #   [1], #1
+    #   [1,3], #2
+    #   [1,1,1], #3
+    #   [6,1,1,1], #4
+    #   [1,1,1,1,7], #5
+    #   [10,1,1,1,1,1], #6
+    #   [1 ,1,1,15,1,1,7]  #7
+    #  ]    
+     
   end
   
   def run
-    (1..1000).map{|e| to_words e}
-  end
-
-  def to_words e  
-    # binding.pry
-    if e<= 20 
-      return @words[e]
-    elsif 21<= e and e<= 99
-      binding.pry if @words[e-e%10].nil? or @words[e%10].nil?
-      return @words[e-e%10] + @words[e%10]
-    elsif 100<= e and e<= 999
-      return @words[(e/100)]+'hundred' + (to_words(e-((e/100)*100))=="" ? "" : "and" + to_words(e-((e/100)*100)))
-    elsif e==1000
-      return 'onethousand'
-    else
-      return nil
+    require 'pry'
+    sums= [[@array[0][0]]]
+    for i in 1..@array.length-1
+        # binding.pry
+        result= clear(sums[i-1])
+        j=0
+        result.each do |e|
+          sums[i]= sums[i] || []
+          sums[i]<< e+@array[i][j] 
+          sums[i]<< e+@array[i][j+1] 
+          j+=1
+        end
+        puts "#{i}, res:#{result}, arr[i]:#{@array[i]}, sums[i]:#{sums[i]}"
     end
+    puts sums[sums.length-1].max
+    
+  end
+  
+  def clear arr
+    result= []
+    return arr if(arr.length<= 2)
+    # return [arr[0], arr[1..2].max, arr[3]] if arr.length == 4
+    # binding.pry
+    arr[1..arr.length-2].each_slice(2) do |slice|
+      result<<slice.max
+    end
+    [arr[0]]+ result+[arr[-1]]
   end
   
 end
-nums= Problem18.new.run
-puts nums.map(&:length).inject(&:+)
+
+Problem18.new.run
