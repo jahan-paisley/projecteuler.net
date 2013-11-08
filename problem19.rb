@@ -45,7 +45,6 @@ class MyDate
         @y+=1
       end
     @day_of_week= (@day_of_week+1)%7
-    "#{y}/#{m}/#{d}"
   end  
     
 end
@@ -54,7 +53,7 @@ date= MyDate.start
 count= 0
 while date.y< 2001 do
   count+=1 if date.day_of_week == 0 and date.d == 1 and date.y>=1901
-  puts date.add_day
+  date.add_day
 end
 
 puts count
