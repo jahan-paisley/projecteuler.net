@@ -388,4 +388,3 @@ def problem16 a
   puts sum+a
 end
 
-  
